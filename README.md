@@ -2,7 +2,7 @@
 
 [![HelloWorld](http://dockeri.co/image/snowdreamtech/helloworld)](https://hub.docker.com/r/snowdreamtech/helloworld)
 
-Docker Image packaging for HelloWorld. (amd64, arm32v6, arm32v7, arm64v8, i386, ppc64le, s390x)
+Docker Image packaging for HelloWorld. (amd64, arm32v6, arm32v7, arm64v8, i386, ppc64le,riscv64, s390x)
 
 # Run
 
@@ -13,7 +13,8 @@ docker run --rm snowdreamtech/helloworld:latest
 # Development
 
 ```bash
-docker buildx build -t snowdreamtech/helloworld --platform=linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/s390x . --push
+docker buildx create --use --name build --node build --driver-opt network=host
+docker buildx build -t snowdreamtech/helloworld --platform=linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/ppc64le,linux/riscv64,linux/s390x . --push
 ```
 
 ## Reference
