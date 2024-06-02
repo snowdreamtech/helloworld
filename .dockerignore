@@ -2,4 +2,5 @@ Dockerfile
 build.sh
 go.mod
 README.md
+LICENSE
 .github
