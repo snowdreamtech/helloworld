@@ -8,6 +8,8 @@ Docker Image packaging for HelloWorld. (amd64, arm32v6, arm32v7, arm64v8, i386, 
 
 ```bash
 docker run --rm snowdreamtech/helloworld:latest
+docker run --rm snowdreamtech/helloworld:alpine
+docker run --rm snowdreamtech/helloworld:debian
 ```
 
 # Development
