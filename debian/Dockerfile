@@ -26,8 +26,8 @@ ENV KEEPALIVE=0
 
 RUN set -eux \
     && apt-get -qqy update  \
-    && apt-get -qqy install --no-install-recommends \ 
-    vim \
+    # && apt-get -qqy install --no-install-recommends \ 
+    # vim \
     && apt-get -qqy --purge autoremove \
     && apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \

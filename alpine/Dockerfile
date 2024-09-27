@@ -24,8 +24,8 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
 # keep the docker container running
 ENV KEEPALIVE=0
 
-RUN apk add --no-cache \
-    vim
+# RUN apk add --no-cache \
+#     vim
 
 COPY --from=builder /app/hello /usr/local/bin/
 
