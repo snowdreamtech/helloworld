@@ -7,7 +7,7 @@ RUN go build -o hello .
 
 
 
-FROM snowdreamtech/debian:12.7.0
+FROM snowdreamtech/debian:12.8.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
@@ -18,7 +18,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="12.7" \
+    org.opencontainers.image.version="12.8.0" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
 
 # keep the docker container running
