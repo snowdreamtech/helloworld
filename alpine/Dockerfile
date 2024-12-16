@@ -7,7 +7,7 @@ RUN go build -o hello .
 
 
 
-FROM snowdreamtech/alpine:3.20.3
+FROM snowdreamtech/alpine:3.21.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
@@ -18,7 +18,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="3.20.3" \
+    org.opencontainers.image.version="3.21.0" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
 
 # keep the docker container running
