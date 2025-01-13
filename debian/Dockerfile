@@ -1,8 +1,6 @@
-FROM snowdreamtech/go:1.23.1-bookworm AS builder
+FROM snowdreamtech/go:1.23.3-bookworm AS builder
 ENV GO111MODULE=auto
-RUN mkdir /app
-ADD hello.go go.mod /app/
-WORKDIR /app
+ADD hello.go go.mod /home/go/
 RUN go build -o hello .
 
 
@@ -64,7 +62,7 @@ RUN set -eux \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/* 
 
-COPY --from=builder /app/hello /usr/local/bin/
+COPY --from=builder /home/go/hello /usr/local/bin/
 
 RUN chown -R ${USER}:${USER} /usr/local/bin/hello
 

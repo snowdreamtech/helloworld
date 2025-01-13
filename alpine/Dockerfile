@@ -1,8 +1,6 @@
-FROM snowdreamtech/go:1.23.1-alpine AS builder
+FROM snowdreamtech/go:1.23.4-alpine3.21 AS builder
 ENV GO111MODULE=auto
-RUN mkdir /app
-ADD hello.go go.mod /app/
-WORKDIR /app
+ADD hello.go go.mod /home/go/
 RUN go build -o hello .
 
 
@@ -51,7 +49,7 @@ RUN if [ "${USER}" != "root" ] && [ "${CAP_NET_BIND_SERVICE}" -eq 1 ]; then \
     # setcap 'cap_net_bind_service=+ep' `which nginx`; \
     fi
 
-COPY --from=builder /app/hello /usr/local/bin/
+COPY --from=builder /home/go/hello /usr/local/bin/
    
 RUN chown -R ${USER}:${USER} /usr/local/bin/hello
 
