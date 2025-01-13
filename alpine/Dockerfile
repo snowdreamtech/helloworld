@@ -1,3 +1,12 @@
+FROM snowdreamtech/go:1.23.1-alpine AS builder
+ENV GO111MODULE=auto
+RUN mkdir /app
+ADD hello.go go.mod /app/
+WORKDIR /app
+RUN go build -o hello .
+
+
+
 FROM snowdreamtech/alpine:3.21.0
 
 # OCI annotations to image
@@ -42,8 +51,9 @@ RUN if [ "${USER}" != "root" ] && [ "${CAP_NET_BIND_SERVICE}" -eq 1 ]; then \
     # setcap 'cap_net_bind_service=+ep' `which nginx`; \
     fi
 
-RUN apk add --no-cache \
-    vim
+COPY --from=builder /app/hello /usr/local/bin/
+   
+RUN chown -R ${USER}:${USER} /usr/local/bin/hello
 
 # Switch to the user
 USER ${USER}

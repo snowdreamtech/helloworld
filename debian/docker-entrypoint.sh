@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+# hello 
+hello
+
 # exec commands
 if [ -n "$*" ]; then
     sh -c "$*"

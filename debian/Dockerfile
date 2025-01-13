@@ -1,3 +1,12 @@
+FROM snowdreamtech/go:1.23.1-bookworm AS builder
+ENV GO111MODULE=auto
+RUN mkdir /app
+ADD hello.go go.mod /app/
+WORKDIR /app
+RUN go build -o hello .
+
+
+
 FROM snowdreamtech/debian:12.8.0
 
 # OCI annotations to image
@@ -55,15 +64,9 @@ RUN set -eux \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/* 
 
-RUN set -eux \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy update  \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \ 
-    vim \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* \
-    && rm -rf /var/tmp/*
+COPY --from=builder /app/hello /usr/local/bin/
+
+RUN chown -R ${USER}:${USER} /usr/local/bin/hello
 
 # Switch to the user
 USER ${USER}
