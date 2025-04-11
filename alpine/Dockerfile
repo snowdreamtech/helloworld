@@ -1,11 +1,22 @@
-FROM snowdreamtech/go:1.23.4-alpine3.21 AS builder
+FROM --platform=$BUILDPLATFORM snowdreamtech/golang:1.23.7-alpine3.21 AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
+
+# Switch to the user
+USER go
+
+# Set the workdir
+WORKDIR /home/go/go/src/snowdream.tech/helloworld
+
 ENV GO111MODULE=auto
-ADD hello.go go.mod /home/go/
-RUN go build -o hello .
+
+COPY hello.go go.mod ./
+
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /home/go/hello 
 
 
-
-FROM snowdreamtech/alpine:3.21.0
+FROM snowdreamtech/alpine:3.21.3
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
@@ -16,7 +27,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="3.21.0" \
+    org.opencontainers.image.version="3.21.3" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
     
 # Switch to the user
@@ -26,7 +37,7 @@ USER root
 WORKDIR /root
 
 # keep the docker container running
-ENV KEEPALIVE=1 \
+ENV KEEPALIVE=0 \
     # The cap_net_bind_service capability in Linux allows a process to bind a socket to Internet domain privileged ports, 
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0 
