@@ -1,6 +1,6 @@
 # HelloWorld
 
-[![HelloWorld](http://dockeri.co/image/snowdreamtech/helloworld)](https://hub.docker.com/r/snowdreamtech/helloworld)
+[![dockeri.co](https://dockerico.blankenship.io/image/snowdreamtech/helloworld)](https://hub.docker.com/r/snowdreamtech/helloworld)
 
 Docker Image packaging for HelloWorld. (amd64, arm32v5,  arm32v6, arm32v7, arm64v8, i386, mips64le, ppc64le,riscv64, s390x)
 
