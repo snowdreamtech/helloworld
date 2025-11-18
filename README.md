@@ -1,11 +1,11 @@
-# Base
+# HelloWorld
 
-![Docker Image Version](https://img.shields.io/docker/v/snowdreamtech/base)
-![Docker Image Size](https://img.shields.io/docker/image-size/snowdreamtech/base/latest)
-![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/base)
-![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/base)
+![Docker Image Version](https://img.shields.io/docker/v/snowdreamtech/helloworld)
+![Docker Image Size](https://img.shields.io/docker/image-size/snowdreamtech/helloworld/latest)
+![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/helloworld)
+![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/helloworld)
 
-Docker Image packaging for Base. (amd64, arm32v5,  arm32v6, arm32v7, arm64v8, i386, mips64le, ppc64le,riscv64, s390x)
+Docker Image packaging for HelloWorld. (amd64, arm32v5,  arm32v6, arm32v7, arm64v8, i386, mips64le, ppc64le,riscv64, s390x)
 
 # Usage
 
@@ -16,22 +16,20 @@ To help you get started creating a container from this image you can either use 
 ### Simple
 
 ```bash
-docker run -d \
-  --name=base \
+docker run \
+  --name=helloworld \
   -e TZ=Asia/Shanghai \
-  --restart unless-stopped \
-  snowdreamtech/base:latest
+  snowdreamtech/helloworld:latest
 ```
 
 ### Advance
 
 ```bash
-docker run -d \
-  --name=base \
+docker run \
+  --name=helloworld \
   -e TZ=Asia/Shanghai \
   -v /path/to/data:/path/to/data \
-  --restart unless-stopped \
-  snowdreamtech/base:latest
+  snowdreamtech/helloworld:latest
 ```
 
 ## Docker Compose
@@ -40,33 +38,31 @@ docker run -d \
 
 ```bash
 services:
-  base:
-    image: snowdreamtech/base:latest
-    container_name: base
+  helloworld:
+    image: snowdreamtech/helloworld:latest
+    container_name: helloworld
     environment:
       - TZ=Asia/Shanghai
-    restart: unless-stopped
 ```
 
 ### Advance
 
 ```bash
 services:
-  base:
-    image: snowdreamtech/base:latest
-    container_name: base
+  helloworld:
+    image: snowdreamtech/helloworld:latest
+    container_name: helloworld
     environment:
       - TZ=Asia/Shanghai
     volumes:
       - /path/to/data:/path/to/data
-    restart: unless-stopped
 ```
 
 # Development
 
 ```bash
 docker buildx create --use --name build --node build --driver-opt network=host
-docker buildx build -t snowdreamtech/base --platform=linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x . --push
+docker buildx build -t snowdreamtech/helloworld --platform=linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x . --push
 ```
 
 ## Reference
@@ -78,7 +74,7 @@ docker buildx build -t snowdreamtech/base --platform=linux/386,linux/amd64,linux
 1. [Faster Multi-Platform Builds: Dockerfile Cross-Compilation Guide](https://www.docker.com/blog/faster-multi-platform-builds-dockerfile-cross-compilation-guide/)
 1. [docker/buildx](https://github.com/docker/buildx)
 
-## Contact (备注：base)
+## Contact (备注：helloworld)
 
 * Email: sn0wdr1am@qq.com
 * QQ: 3217680847
