@@ -1,16 +1,31 @@
+FROM --platform=$BUILDPLATFORM snowdreamtech/golang:1.24.4-trixie AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
+
+# Set the workdir
+WORKDIR /root/go/src/snowdream.tech/helloworld
+
+ENV GO111MODULE=auto
+
+COPY hello.go go.mod ./
+
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/hello 
+
+
 FROM snowdreamtech/debian:13.1.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Base on Debian. (i386,amd64,arm32v5,arm32v7,arm64,mips64le,ppc64le,s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:debian" \
+    org.opencontainers.image.title="HelloWorld Image Based On Debian" \
+    org.opencontainers.image.description="Docker Images for HelloWorld on Debian. (i386,amd64,arm32v5,arm32v7,arm64,mips64le,ppc64le,s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/helloworld" \
+    org.opencontainers.image.base.name="snowdreamtech/helloworld:debian" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
     org.opencontainers.image.version="13.1.0" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
 
 # Switch to the user
 USER root
@@ -50,15 +65,9 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
-RUN set -eux \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy update  \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \ 
-    vim \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* \
-    && rm -rf /var/tmp/*
+COPY --from=builder /root/go/bin/hello /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/hello
 
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ]; then \
