@@ -1,16 +1,31 @@
+FROM --platform=$BUILDPLATFORM snowdreamtech/golang:1.24.9-alpine3.22 AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
+
+# Set the workdir
+WORKDIR /root/go/src/snowdream.tech/helloworld
+
+ENV GO111MODULE=auto
+
+COPY hello.go go.mod ./
+
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/hello 
+
+
 FROM snowdreamtech/alpine:3.22.2
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Alpine" \
-    org.opencontainers.image.description="Docker Images for Base on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le,riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:alpine" \
+    org.opencontainers.image.title="HelloWorld Image Based On Alpine" \
+    org.opencontainers.image.description="Docker Images for HelloWorld on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le,riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/helloworld" \
+    org.opencontainers.image.base.name="snowdreamtech/helloworld:alpine" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
     org.opencontainers.image.version="3.22.2" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
     
 # Switch to the user
 USER root
@@ -48,8 +63,9 @@ ENV KEEPALIVE=${KEEPALIVE} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
-RUN apk add --no-cache \
-    vim
+COPY --from=builder /root/go/bin/hello /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/hello
 
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ]; then \
