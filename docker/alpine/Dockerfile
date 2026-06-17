@@ -10,7 +10,7 @@ ENV GO111MODULE=auto
 
 COPY hello.go go.mod ./
 
-RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/hello 
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/hello
 
 # Base Image (Alpine Variant)
 # Extends snowdreamtech/alpine with additional tooling and configuration.
