@@ -1,0 +1,7 @@
+go 1.22
+
+use (
+	./docker/alpine
+	./docker/debian
+	./docker/rocky
+)
