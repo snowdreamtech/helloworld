@@ -43,7 +43,7 @@ docker run -d \
   snowdreamtech/helloworld:debian
 ```
 
-**Supported Architectures**: i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x
+**Supported Architectures**: i386, amd64, arm32v5, arm32v7, arm64, ppc64le, riscv64, s390x
 
 **HelloWorld Image**: `snowdreamtech/debian:13.5.0`
 
@@ -75,7 +75,7 @@ docker run -d \
   snowdreamtech/helloworld:rocky
 ```
 
-**Supported Architectures**: i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x
+**Supported Architectures**: i386, amd64, arm32v5, arm32v7, arm64, ppc64le, riscv64, s390x
 
 **HelloWorld Image**: `snowdreamtech/rocky:10.2.0`
 
@@ -215,7 +215,7 @@ Examples:
 
 This format allows:
 
-- **Full version pinning**: `13.5.0-debian` (exact version)
+- **Full version pinning**: `<version>-debian` (exact version)
 - **Variant latest tag**: `latest-debian` (tracks most recent release for Debian)
 - **Global latest tag**: `latest` (tracks most recent release, defaults to Debian)
 
@@ -225,9 +225,9 @@ Each distribution variant supports multiple CPU architectures for deployment acr
 
 | Variant | Architectures |
 |---------|---------------|
-| **Debian** | i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x |
+| **Debian** | i386, amd64, arm32v5, arm32v7, arm64, ppc64le, riscv64, s390x |
 | **Alpine** | i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x |
-| **Rocky** | i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x |
+| **Rocky** | amd64, arm64, ppc64le, s390x |
 
 Docker automatically selects the appropriate architecture for your platform when pulling images.
 

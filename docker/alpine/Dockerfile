@@ -15,7 +15,7 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldfl
 # Base Image (Alpine Variant)
 # Extends snowdreamtech/alpine with additional tooling and configuration.
 
-FROM ghcr.io/snowdreamtech/alpine:3.24.0
+FROM ghcr.io/snowdreamtech/alpine:3.24.1
 
 # Build-time Configuration
 ARG BUILDTIME \
@@ -41,7 +41,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="${VERSION:-3.24.0}" \
+    org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
