@@ -1,0 +1,183 @@
+# Copyright (c) 2026 SnowdreamTech. All rights reserved.
+# Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+---
+# GoReleaser (Build & Release Automation)
+# Purpose: Orchestrates the compilation, packaging, and distribution of Go binaries and artifacts.
+# Trigger: Automated on specific version tags (v*); manually via workflow_dispatch for snapshots.
+# Permissions:
+#   - contents: write (Required to create GitHub Releases, upload assets, and push tags).
+#   - packages: write (Required for container registry publishing if configured).
+# Concurrency:
+#   - group: ${{ github.workflow }}-${{ github.ref }} (Ensures atomic release operations).
+#   - cancel-in-progress: false (Release processes must complete to avoid partial releases).
+# Design:
+#   - Triggers automatically on release tags to ensure a high-velocity, reliable distribution.
+#   - Supports manual snapshot builds to verify configuration or extract bleeding-edge binaries.
+
+name: "📦 GoReleaser"
+
+"on":
+  push:
+    tags:
+      # Unified release-please generated tags (vX.Y.Z format)
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+"
+      - "v[0-9]+"
+
+permissions: {}
+
+env:
+  UNIRTM_LOCKED: 1
+  # Opt into Node.js 24 now ahead of GitHub's June 16, 2026 forced migration.
+  # See: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "1"
+
+jobs:
+  goreleaser:
+    name: "📦 Distribution Packaging"
+    runs-on: ubuntu-latest
+    environment: internal
+    concurrency:
+      group: goreleaser-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: false # Release processes must complete to avoid partial releases
+    permissions:
+      contents: write
+      id-token: write # Required for keyless signing via Sigstore if configured
+      statuses: write # Required for updating commit statuses
+      security-events: write # Required if release includes security reports
+      attestations: write # Required for uploading attestations
+    timeout-minutes: 60
+    steps:
+      - name: "🧹 Free Disk Space (Ubuntu)"
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+
+      - name: "📂 Checkout Repository Code"
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          # Required: Fetch all tags and historical context for GoReleaser to accurately determine the next version.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: "⚡ Setup UniRTM"
+        uses: snowdreamtech/setup-unirtm@7711c9fc506ca29a54cba2d7d8181d2b146f00d9 # v0.6.0
+        with:
+          unirtm-version: "0.25.7"
+          install: true
+          trust: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+
+      - name: "🧹 Clean Git State (Discard Lockfile Changes)"
+        shell: sh
+        run: |
+          # setup-unirtm runs 'unirtm install' which might update unirtm.lock if version bumped.
+          # GoReleaser requires a strict clean state, so we forcefully reset the working tree.
+          git reset --hard HEAD
+          git clean -fd
+
+      - name: "📦 Install Syft (for GoReleaser SBOM)"
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+
+      - name: "🔧 Set up QEMU for multi-architecture builds"
+        uses: docker/setup-qemu-action@06116385d9baf250c9f4dcb4858b16962ea869c3 # v4.1.0
+
+      - name: "🔧 Install Cosign (for keyless artifact signing)"
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+
+      - name: "🌡️ Warm up Go Proxy"
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: sh
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          echo "Warming up Go Proxy for ${TAG}..."
+          # Wait up to 60 seconds for Go proxy to sync the new tag
+          for i in $(seq 1 12); do
+            if curl -s -f "https://proxy.golang.org/snowdream.tech/helloworld/@v/${TAG}.info" > /dev/null; then
+              echo "✅ Go Proxy is ready!"
+              exit 0
+            fi
+            echo "⏳ Waiting for proxy to sync (attempt $i/12)..."
+            sleep 5
+          done
+          echo "⚠️ Proxy might not be ready, but proceeding anyway..."
+
+      - name: "🚀 Distribute Artifacts (GoReleaser)"
+        uses: goreleaser/goreleaser-action@5daf1e915a5f0af01ddbcd89a43b8061ff4f1a89 # v7.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+          WORKFLOW_SECRET: ${{ secrets.WORKFLOW_SECRET }}
+        with:
+          # Orchestrates the optimized build and distribution of cross-compiled Go binaries.
+          distribution: goreleaser
+          version: "~> v2" # Pins to the latest stable v2 series binary
+          args: ${{ startsWith(github.ref, 'refs/tags/') && 'release --clean --timeout 60m' || 'release --snapshot --clean --skip=publish --timeout 60m' }}
+
+      - name: "🛡️ Attest Build Provenance (SLSA)"
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
+        with:
+          subject-checksums: dist/checksums.txt
+
+      - name: "🧹 Cleanup on Failure (Rollback)"
+        if: failure() && startsWith(github.ref, 'refs/tags/')
+        shell: sh
+        env:
+          GITHUB_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+        run: |
+          echo "⚠️ Release process failed for ${GITHUB_REF_NAME}. Rolling back partial release..."
+          # Delete the partial GitHub release and the associated tag to allow for a clean retry.
+          gh release delete "${GITHUB_REF_NAME}" --yes --cleanup-tag
+
+  verify:
+    name: "🔍 Verify Release Signature"
+    runs-on: ubuntu-latest
+    needs: [goreleaser]
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: "🔧 Install Cosign (for keyless artifact signing)"
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+
+      - name: "📥 Get tag name"
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> "$GITHUB_ENV"
+
+      - name: "📥 Download release artifacts"
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+        run: |
+          gh release download "$TAG" \
+            --repo snowdreamtech/helloworld \
+            --pattern 'helloworld_Linux_x86_64.tar.gz' \
+            --pattern 'checksums.txt' \
+            --pattern 'checksums.txt.sigstore.json'
+
+      - name: "✅ Verify checksums"
+        run: shasum -a 256 --check --ignore-missing checksums.txt
+
+      - name: "🔒 Verify cosign signature"
+        run: |
+          cosign verify-blob \
+            --certificate-identity "https://github.com/snowdreamtech/helloworld/.github/workflows/goreleaser.yml@refs/tags/$TAG" \
+            --certificate-oidc-issuer 'https://token.actions.githubusercontent.com' \
+            --bundle checksums.txt.sigstore.json \
+            checksums.txt
+
+      - name: "🛡️ Verify SLSA attestations"
+        env:
+          GH_TOKEN: ${{ secrets.WORKFLOW_SECRET || secrets.GITHUB_TOKEN }}
+        run: |
+          gh attestation verify helloworld_Linux_x86_64.tar.gz \
+            --repo snowdreamtech/helloworld \
+            --signer-repo snowdreamtech/helloworld
