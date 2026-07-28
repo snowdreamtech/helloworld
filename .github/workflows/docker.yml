@@ -15,31 +15,10 @@ name: "🐳 Docker Multi-Platform Build"
     branches:
       - "dev"
     tags:
-      # Release-Please generated tags for Alpine (primary format)
-      - "alpine-v*"
-      # Release-Please generated tags for Debian (primary format)
-      - "debian-v*"
-      # Release-Please generated tags for Rocky (primary format)
-      - "rocky-v*"
-      # Legacy semantic version tags (backward compatibility)
-      - "[0-9]+.[0-9]+.[0-9]+"
+      # Unified release-please generated tags (vX.Y.Z format)
       - "v[0-9]+.[0-9]+.[0-9]+"
-      - "V[0-9]+.[0-9]+.[0-9]+"
-      - "alpine-*.*.*"
-      - "debian-*.*.*"
-      - "rocky-*.*.*"
-      - "[0-9]+.[0-9]+"
       - "v[0-9]+.[0-9]+"
-      - "V[0-9]+.[0-9]+"
-      - "alpine-*.*"
-      - "debian-*.*"
-      - "rocky-*.*"
-      - "[0-9]+"
       - "v[0-9]+"
-      - "V[0-9]+"
-      - "alpine-*"
-      - "debian-*"
-      - "rocky-*"
 
   schedule:
     # Automatically run every day at 17:00 UTC
@@ -118,40 +97,7 @@ jobs:
             fi
           fi
 
-          # For tag pushes, check if tag matches this variant
-          if [ "${{ github.event_name }}" = "push" ]; then
-            case "${{ github.ref }}" in
-              refs/tags/*)
-                tag_name="${{ github.ref }}"
-                tag_name="${tag_name#refs/tags/}"
-                case "${tag_name}" in
-                  ${{ matrix.variant }}-*)
-                    # Tag matches variant, continue
-                    ;;
-                  *)
-                    echo "skip=true" >> "$GITHUB_OUTPUT"
-                    echo "→ Skipping ${{ matrix.variant }} (tag ${tag_name} does not match)"
-                    exit 0
-                    ;;
-                esac
-                ;;
-            esac
-          fi
-
-          # For release events, check if release tag matches this variant
-          if [ "${{ github.event_name }}" = "release" ]; then
-            tag_name="${{ github.event.release.tag_name }}"
-            case "${tag_name}" in
-              ${{ matrix.variant }}-*)
-                # Release tag matches variant, continue
-                ;;
-              *)
-                echo "skip=true" >> "$GITHUB_OUTPUT"
-                echo "→ Skipping ${{ matrix.variant }} (release tag ${tag_name} does not match)"
-                exit 0
-                ;;
-            esac
-          fi
+          # Unified tags (v*): all variants build together, no per-variant filtering needed
 
           echo "skip=false" >> "$GITHUB_OUTPUT"
           echo "→ Building ${{ matrix.variant }} ${{ matrix.version }}"
@@ -249,7 +195,8 @@ jobs:
         id: tag-check
         if: steps.variant-filter.outputs.skip != 'true'
         run: |
-          if echo "${{ github.ref }}" | grep -Eq "^refs/tags/${{ matrix.variant }}-v?[0-9]+\.[0-9]+\.[0-9]+$"; then
+          # Unified version tag: v1.0.0 format (without variant prefix)
+          if echo "${{ github.ref }}" | grep -Eq "^refs/tags/v?[0-9]+\.[0-9]+\.[0-9]+$"; then
             echo "is_stable=true" >> "$GITHUB_OUTPUT"
           else
             echo "is_stable=false" >> "$GITHUB_OUTPUT"
@@ -283,8 +230,8 @@ jobs:
             type=schedule,enable=true,priority=1000,prefix=,suffix=-${{ matrix.variant }},pattern=nightly
             # Nightly builds - global nightly tag (only for is_latest variant, no suffix)
             type=schedule,enable=${{ matrix.is_latest }},priority=1000,prefix=,suffix=,pattern=nightly
-            # Semantic version tags from Release Please (variant-x.y.z) - variant-suffixed
-            type=match,enable=${{ startsWith(github.ref, format('refs/tags/{0}-', matrix.variant)) }},priority=800,prefix=,suffix=-${{ matrix.variant }},pattern=${{ matrix.variant }}-v?(.*),group=1
+            # Semantic version tags from Release Please (v1.0.0) - variant-suffixed
+            type=match,enable=${{ startsWith(github.ref, 'refs/tags/v') }},priority=800,prefix=,suffix=-${{ matrix.variant }},pattern=v(.*),group=1
         env:
           DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
 
