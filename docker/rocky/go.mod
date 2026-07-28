@@ -1,3 +1,3 @@
-module snowdream.tech/helloworld/docker/rocky
+module github.com/snowdreamtech/helloworld/docker/rocky
 
 go 1.24.4
