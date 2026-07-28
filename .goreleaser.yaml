@@ -214,9 +214,6 @@ flatpak:
     runtime: org.freedesktop.Platform
     runtime_version: "24.08"
     sdk: org.freedesktop.Sdk
-    finish_args:
-      - --share=network
-      - --filesystem=host
 
 universal_binaries:
   - replace: false
