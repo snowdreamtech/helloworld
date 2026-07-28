@@ -39,6 +39,9 @@ builds:
       - linux
       - darwin
       - windows
+      - freebsd
+      - openbsd
+      - netbsd
     goarch:
       - "386"
       - amd64
@@ -53,6 +56,18 @@ builds:
     ignore:
       - goos: windows
         goarch: arm
+      - goos: openbsd
+        goarch: "386"
+      - goos: openbsd
+        goarch: arm
+      - goos: openbsd
+        goarch: riscv64
+      - goos: netbsd
+        goarch: "386"
+      - goos: netbsd
+        goarch: arm
+      - goos: netbsd
+        goarch: arm64
     mod_timestamp: "{{ .CommitTimestamp }}"
 
 archives:
@@ -183,6 +198,28 @@ nfpms:
       lintian_overrides:
         - statically-linked-binary
         - changelog-file-missing-in-native-package
+
+snapcrafts:
+  - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    summary: Snowdream Tech Helloworld
+    description: |
+      Snowdream Tech Helloworld is a minimal Go application that demonstrates cross-platform binary distribution.
+    grade: stable
+    confinement: classic
+    publish: false
+    disable: "{{ if .IsNightly }}true{{ end }}"
+
+flatpak:
+  - app_id: io.github.snowdreamtech.helloworld
+    runtime: org.freedesktop.Platform
+    runtime_version: "24.08"
+    sdk: org.freedesktop.Sdk
+    finish_args:
+      - --share=network
+      - --filesystem=host
+
+universal_binaries:
+  - replace: false
 
 sboms:
   # Generate SBOMs for all release artifacts: archives (tar.gz/zip) and Linux packages (deb/rpm/apk/archlinux)
