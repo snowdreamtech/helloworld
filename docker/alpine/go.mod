@@ -1,3 +1,5 @@
 module github.com/snowdreamtech/helloworld
 
-go 1.24.5
+go 1.26.5
+
+toolchain go1.26.5
