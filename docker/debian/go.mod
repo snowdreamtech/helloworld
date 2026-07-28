@@ -1,3 +1,3 @@
-module github.com/snowdreamtech/helloworld/docker/debian
+module github.com/snowdreamtech/helloworld
 
 go 1.24.4

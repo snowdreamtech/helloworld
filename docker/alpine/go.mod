@@ -1,3 +1,3 @@
-module github.com/snowdreamtech/helloworld/docker/alpine
+module github.com/snowdreamtech/helloworld
 
 go 1.24.4
