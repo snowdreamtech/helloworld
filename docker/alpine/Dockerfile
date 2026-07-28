@@ -4,7 +4,7 @@ ARG TARGETOS
 ARG TARGETARCH
 
 # Set the workdir
-WORKDIR /root/go/src/snowdream.tech/helloworld
+WORKDIR /root/go/src/github.com/snowdreamtech/helloworld
 
 ENV GO111MODULE=auto
 
