@@ -414,45 +414,6 @@
 * upgrade setup-unirtm action to v0.6.0 and UniRTM to v0.25.7 in workflows ([1088902](https://github.com/snowdreamtech/helloworld/commit/10889026cbc7ce16ab41407a099d74cf6a6eb89f))
 * upgrade UniRTM setup to v0.7.0, update dependencies, and optimize CI workflows ([fc09baa](https://github.com/snowdreamtech/helloworld/commit/fc09baa30f9c1bc6aa1087844319038d499dbdaa))
 
-## [1.1.0](https://github.com/snowdreamtech/helloworld/compare/v1.0.0...v1.1.0) (2026-08-12)
-
-
-### ⚠ BREAKING CHANGES
-
-* **merge:** Debian i386, arm32v5, and mips64le architecture support removed
-
-### 🚀 Features
-
-* enable remote.SSH.allowLocalServerDownload to improve connection reliability ([8a6c80d](https://github.com/snowdreamtech/helloworld/commit/8a6c80dd26e92e1a2d37be50a2ca5ca5113f08d8))
-* **release:** expand goreleaser artifact coverage to match UniStack ([3c45866](https://github.com/snowdreamtech/helloworld/commit/3c45866d460b5d3d69e97c752ea3e187b36dcba2))
-* update vscode settings with enhanced editor, explorer, and terminal configurations ([44230bc](https://github.com/snowdreamtech/helloworld/commit/44230bceaf3deebc247739e9f91c55a1d2721803))
-
-
-### 🐛 Bug Fixes
-
-* **docs:** resolve npm vulnerabilities by pinning exact dependency versions ([d628640](https://github.com/snowdreamtech/helloworld/commit/d6286404ea025ee0cad3123b5b0b3bc6bd21a551))
-* **goreleaser:** remove unnecessary flatpak finish_args for helloworld ([03163c2](https://github.com/snowdreamtech/helloworld/commit/03163c2a90b2ae75ebfb8860ee990f7ddbd1d286))
-* **security:** resolve postcss vulnerability and fix gh issue creation label ([d1a10c0](https://github.com/snowdreamtech/helloworld/commit/d1a10c0e4673c96c4bc05f34ec58527f4d1dead0))
-
-
-### ♻️ Miscellaneous Chores
-
-* **deps:** bump vite in /docs in the all-dependencies group ([e76a8af](https://github.com/snowdreamtech/helloworld/commit/e76a8af46f8e97f61184b266c0ea65b26309a8a8))
-* **deps:** sync dependabot config and unirtm toolchain ([df2e66f](https://github.com/snowdreamtech/helloworld/commit/df2e66f155c25f98c716d3134cff3d1acc789c07))
-* **deps:** sync dependabot config and unirtm toolchain ([f561c65](https://github.com/snowdreamtech/helloworld/commit/f561c65fd180508bba43e61ed445fba6e3898d23))
-* **deps:** update go version to 1.26.5 ([91349d4](https://github.com/snowdreamtech/helloworld/commit/91349d45d07f4928818f869a38e06042912d0710))
-* **deps:** update unirtm toolchain versions ([23e763a](https://github.com/snowdreamtech/helloworld/commit/23e763a3ea3618766e9f9103095f1aff52764652))
-* **docker:** ignore unavailable repos for rocky build ([a6b6b6e](https://github.com/snowdreamtech/helloworld/commit/a6b6b6e5b2288cfeb6b2777902b85e7e5f37f2c3))
-* merge upstream/dev into dev ([70f965e](https://github.com/snowdreamtech/helloworld/commit/70f965e8cfc40f188786d5fd620c06e759bf2cd1))
-* **merge:** merge upstream/dev with base image updates ([98d2450](https://github.com/snowdreamtech/helloworld/commit/98d2450d45a9cf557ba5d52311e10091c1f677af))
-* release main ([c9db13e](https://github.com/snowdreamtech/helloworld/commit/c9db13ecc5033081c703e996d33c7503860ec15e))
-* release main ([ac32ddd](https://github.com/snowdreamtech/helloworld/commit/ac32ddd54d05d077fbfb0d310df419e82cef3e39))
-* release main ([a3848c6](https://github.com/snowdreamtech/helloworld/commit/a3848c6ef66794de17cb5a0411310a863fe2e6af))
-* **release:** deduplicate CHANGELOG headers ([a186680](https://github.com/snowdreamtech/helloworld/commit/a186680625ac23b3ebbdf41e75a7370f38e03d22))
-* **release:** set bump-patch-for-minor-pre-major to false ([1e47e29](https://github.com/snowdreamtech/helloworld/commit/1e47e29bf8d338de6bf5cee8c1373507568c5c4c))
-* sync debian build matrix and documentation with upstream ([0d6e613](https://github.com/snowdreamtech/helloworld/commit/0d6e6132c84a368f5b64b9144d9c7d3b7292d746))
-* upgrade UniRTM setup to v0.7.0, update dependencies, and optimize CI workflows ([fc09baa](https://github.com/snowdreamtech/helloworld/commit/fc09baa30f9c1bc6aa1087844319038d499dbdaa))
-
 ## [1.0.0](https://github.com/snowdreamtech/helloworld/compare/v1.0.0...v1.0.0) (2026-07-28)
 
 
