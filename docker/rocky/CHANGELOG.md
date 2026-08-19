@@ -7,13 +7,6 @@
 
 * **docker:** ignore unavailable repos for rocky build ([a6b6b6e](https://github.com/snowdreamtech/base/commit/a6b6b6e5b2288cfeb6b2777902b85e7e5f37f2c3))
 
-## [10.2.0](https://github.com/snowdreamtech/base/compare/rocky-v10.2.0...rocky-v10.2.0) (2026-07-24)
-
-
-### 🐛 Bug Fixes
-
-* remove static version defaults from OCI image labels to use variable injection exclusively ([da5645a](https://github.com/snowdreamtech/base/commit/da5645ad4d48467290235abbbd9f31ba70bf690f))
-
 ## [10.1.0](https://github.com/snowdreamtech/base/compare/rocky-v10.1.0...rocky-v10.1.0) (2026-04-29)
 
 
