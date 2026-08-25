@@ -3,6 +3,13 @@
 ## [1.1.0](https://github.com/snowdreamtech/helloworld/compare/v1.1.0...v1.1.0) (2026-08-25)
 
 
+### 🐛 Bug Fixes
+
+* **ci:** support unified release tags in docker workflow matrix and metadata ([4fc5f9a](https://github.com/snowdreamtech/helloworld/commit/4fc5f9ab81d9521afc6d4ee3a023c38d93efca13))
+
+## [1.1.0](https://github.com/snowdreamtech/helloworld/compare/v1.1.0...v1.1.0) (2026-08-25)
+
+
 ### 🚀 Features
 
 * **release:** configure extra-files to auto-update docker.yml version ([485e895](https://github.com/snowdreamtech/helloworld/commit/485e895a5d13f254d8bed64f51a78905c59ea4b9))
