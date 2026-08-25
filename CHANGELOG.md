@@ -45,48 +45,6 @@
 * **release:** deduplicate CHANGELOG headers ([8552a1a](https://github.com/snowdreamtech/helloworld/commit/8552a1a0eda50c4c2e3ca7a4e6f863a61b1dc200))
 * **release:** deduplicate CHANGELOG headers ([656f92c](https://github.com/snowdreamtech/helloworld/commit/656f92c06f70b548a9fabf4db3fb1f02daf18733))
 
-## [1.1.0](https://github.com/snowdreamtech/helloworld/compare/v1.1.0...v1.1.0) (2026-08-25)
-
-
-### 🚀 Features
-
-* **release:** configure extra-files to auto-update docker.yml version ([485e895](https://github.com/snowdreamtech/helloworld/commit/485e895a5d13f254d8bed64f51a78905c59ea4b9))
-
-
-### 🐛 Bug Fixes
-
-* update nanoid to 3.3.18 in package-lock.json ([7411de0](https://github.com/snowdreamtech/helloworld/commit/7411de016dbe4a384dc51712354aac7852f4e00b))
-* update nanoid to 3.3.18 in package-lock.json ([e0e8139](https://github.com/snowdreamtech/helloworld/commit/e0e8139c2474429e7c95af6bc65b0a450297eac4))
-* update nanoid to 3.3.18 in package-lock.json ([31e7994](https://github.com/snowdreamtech/helloworld/commit/31e79948a7d63ca148c6b87da11b65a560487b19))
-
-
-### 📖 Documentation
-
-* update go version references to 1.27.0 ([227af5c](https://github.com/snowdreamtech/helloworld/commit/227af5cd1be6ad37e5fc8642980abf9f12e3a9ac))
-
-
-### ♻️ Miscellaneous Chores
-
-* **deps:** bump the all-dependencies group in /docs with 3 updates ([85368e8](https://github.com/snowdreamtech/helloworld/commit/85368e81aeaa262113e5d92e6211945ce77263de))
-* **deps:** bump the all-dependencies group in /docs with 3 updates ([8c8ffd9](https://github.com/snowdreamtech/helloworld/commit/8c8ffd91c27ffc4a74cf44ea5c3eadec988ffa04))
-* **deps:** sync dependabot config and unirtm toolchain ([44f5789](https://github.com/snowdreamtech/helloworld/commit/44f5789a6bd89bb876bdfd3f7ed2fb093007093a))
-* **deps:** sync dependabot config and unirtm toolchain ([27a1171](https://github.com/snowdreamtech/helloworld/commit/27a1171eff6b785152b45f082fb3cb767da31863))
-* **deps:** sync dependabot config and unirtm toolchain ([e95268c](https://github.com/snowdreamtech/helloworld/commit/e95268ca2d908485a3ac55f06ad9bcf95e162c07))
-* **deps:** sync dependabot config and unirtm toolchain ([4f74adf](https://github.com/snowdreamtech/helloworld/commit/4f74adfffc0e78819a8a53ed22284f2c0897e8e2))
-* **deps:** sync dependabot config and unirtm toolchain ([eabf483](https://github.com/snowdreamtech/helloworld/commit/eabf483fd39cd3a00f73d7e380a8e82a8de3eb3d))
-* **deps:** sync dependabot config and unirtm toolchain ([70cd8d9](https://github.com/snowdreamtech/helloworld/commit/70cd8d91e24ff5d79ee4508b8d87a71c43f87912))
-* **deps:** update go version to 1.27.0 ([d0e82f7](https://github.com/snowdreamtech/helloworld/commit/d0e82f7ade15f0e10b6a17f379151476c3948c64))
-* **deps:** update govulncheck tool version to v1.7.0 for Go 1.27 AST support ([54e84b9](https://github.com/snowdreamtech/helloworld/commit/54e84b9edc847675b20fa7ef7262d41b95878661))
-* **deps:** update unirtm toolchain version to 0.28.0 ([b24cb8e](https://github.com/snowdreamtech/helloworld/commit/b24cb8ef46c5fd2abce6b84a0cb8354b725f9ae7))
-* **deps:** upgrade golang version to 1.27.0 in template ([8559102](https://github.com/snowdreamtech/helloworld/commit/8559102441208d4d9d5150bea6705f565129a190))
-* merge upstream/dev into dev ([3550c2f](https://github.com/snowdreamtech/helloworld/commit/3550c2fb4aa2fd854569a6f209027897886b3148))
-* **merge:** merge upstream/dev into dev ([c68320b](https://github.com/snowdreamtech/helloworld/commit/c68320ba3efb5ccfd36c9afb252712abf870da26))
-* **merge:** merge upstream/dev into dev ([39562d2](https://github.com/snowdreamtech/helloworld/commit/39562d298349db146c2a958abe6bb1cb7fab52ed))
-* release main ([f194b67](https://github.com/snowdreamtech/helloworld/commit/f194b6782d11cd801472361df52aa91e89ff4885))
-* release main ([55a97dd](https://github.com/snowdreamtech/helloworld/commit/55a97ddfbd7dc4d81d95104d2d32ed1e6dc7d763))
-* release main ([f02b25f](https://github.com/snowdreamtech/helloworld/commit/f02b25f841191eb64887a336d230ee952d0bf0a2))
-* **release:** deduplicate CHANGELOG headers ([656f92c](https://github.com/snowdreamtech/helloworld/commit/656f92c06f70b548a9fabf4db3fb1f02daf18733))
-
 ## [1.0.0](https://github.com/snowdreamtech/helloworld/compare/v1.0.0...v1.0.0) (2026-07-28)
 
 
