@@ -3,9 +3,9 @@
 ## [1.1.0](https://github.com/snowdreamtech/helloworld/compare/v1.1.0...v1.1.0) (2026-08-25)
 
 
-### 🐛 Bug Fixes
+### ♻️ Miscellaneous Chores
 
-* **ci:** support unified release tags in docker workflow matrix and metadata ([4fc5f9a](https://github.com/snowdreamtech/helloworld/commit/4fc5f9ab81d9521afc6d4ee3a023c38d93efca13))
+* **release:** remove unused sub-package CHANGELOG files under docker/ ([afcea9e](https://github.com/snowdreamtech/helloworld/commit/afcea9e96016e941be1ad2104e3f473d98e16a91))
 
 ## [1.0.0](https://github.com/snowdreamtech/helloworld/compare/v1.0.0...v1.0.0) (2026-07-28)
 
