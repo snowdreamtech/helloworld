@@ -1,14 +1,25 @@
+FROM --platform=$BUILDPLATFORM snowdreamtech/golang:1.27.3-alpine AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
+
+# Set the workdir
+WORKDIR /root/go/src/github.com/snowdreamtech/helloworld
+
+ENV GO111MODULE=auto
+
+COPY hello.go go.mod ./
+
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/hello
+
 # Base Image (Alpine Variant)
 # Extends snowdreamtech/alpine with additional tooling and configuration.
 
 FROM ghcr.io/snowdreamtech/alpine:3.24.1
 
 # Build-time Configuration
-# x-release-please-start-version
-ARG VERSION="3.24.1"
-# x-release-please-end
-
 ARG BUILDTIME \
+    VERSION \
     REVISION \
     KEEPALIVE=0 \
     CAP_NET_BIND_SERVICE=0 \
@@ -23,17 +34,17 @@ ARG BUILDTIME \
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Alpine" \
-    org.opencontainers.image.description="Docker Images for Base on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:alpine" \
+    org.opencontainers.image.title="HelloWorld Image Based On Alpine" \
+    org.opencontainers.image.description="Docker Images for HelloWorld on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/helloworld" \
+    org.opencontainers.image.base.name="ghcr.io/snowdreamtech/alpine:3.24.1" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
     org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
 
 # Runtime Environment Configuration
 ENV KEEPALIVE=${KEEPALIVE} \
@@ -47,10 +58,9 @@ ENV KEEPALIVE=${KEEPALIVE} \
     USER=${USER} \
     WORKDIR=${WORKDIR}
 
-# Additional tooling and configuration for Base image
-RUN apk update \
-    && apk add --no-cache \
-    vim
+COPY --from=builder /root/go/bin/hello /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/hello
 
 # Container Orchestration Files
 COPY entrypoint.d /usr/local/bin/entrypoint.d

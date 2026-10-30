@@ -1,14 +1,25 @@
+FROM --platform=$BUILDPLATFORM snowdreamtech/golang:1.27.3-debian AS builder
+
+ARG TARGETOS
+ARG TARGETARCH
+
+# Set the workdir
+WORKDIR /root/go/src/github.com/snowdreamtech/helloworld
+
+ENV GO111MODULE=auto
+
+COPY hello.go go.mod ./
+
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -trimpath -ldflags "-s -w" -v -o /root/go/bin/hello
+
 # Base Image (Debian Variant)
 # Extends snowdreamtech/debian with additional tooling and configuration.
 
 FROM ghcr.io/snowdreamtech/debian:13.6.0
 
 # Build-time Configuration
-# x-release-please-start-version
-ARG VERSION="13.6.0"
-# x-release-please-end
-
 ARG BUILDTIME \
+    VERSION \
     REVISION \
     DEBIAN_FRONTEND=noninteractive \
     KEEPALIVE=0 \
@@ -24,17 +35,17 @@ ARG BUILDTIME \
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Base on Debian. (amd64, arm32v7, arm64, ppc64le, riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:debian" \
+    org.opencontainers.image.title="HelloWorld Image Based On Debian" \
+    org.opencontainers.image.description="Docker Images for HelloWorld on Debian. (amd64, arm32v7, arm64, ppc64le, riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/helloworld" \
+    org.opencontainers.image.base.name="ghcr.io/snowdreamtech/debian:13.6.0" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/helloworld" \
     org.opencontainers.image.vendor="Snowdream Tech" \
     org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/helloworld"
 
 # Runtime Environment Configuration
 ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
@@ -49,16 +60,9 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     USER=${USER} \
     WORKDIR=${WORKDIR}
 
-# Additional tooling and configuration for Base image
-RUN set -eux \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy update \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \
-    vim \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
-    && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/* \
-    && rm -rf /var/tmp/*
+COPY --from=builder /root/go/bin/hello /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/hello
 
 # Container Orchestration Files
 COPY entrypoint.d /usr/local/bin/entrypoint.d
